@@ -1,0 +1,1 @@
+conda create --name tfxca --file requirements.txt 
