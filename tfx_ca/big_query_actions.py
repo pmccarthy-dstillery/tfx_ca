@@ -1,3 +1,4 @@
+import datetime
 from google.cloud import bigquery
 import google
 import importlib.resources as pkg_resources
@@ -75,3 +76,4 @@ def create_visitdata_table():
 
     finally:
         client.close()
+
