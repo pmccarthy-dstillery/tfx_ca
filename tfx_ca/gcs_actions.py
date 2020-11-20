@@ -31,16 +31,25 @@ def stat_or_create_bucket(bucket):
         logging.info("Bucket %s created", bucket)
 
 
-def delete_bucket_contents(bucket):
+def list_bucket_contents(bucket):
+
+    client = storage.Client()
+
+    bucket = client.bucket(bucket)
+
+    return client.list_blobs(bucket)
+
+
+def delete_bucket_contents(bucket_id):
     """
     List everything in a bucket and then delete what
     is found.
     """
 
     client = storage.Client()
-    bucket = client.bucket(bucket) 
+    bucket = client.bucket(bucket_id) 
 
-    blobs = client.list_blobs(bucket)
+    blobs = list_bucket_contents(bucket_id) 
 
     for blob in blobs:
         blob = bucket.blob(blob.name)
@@ -72,13 +81,15 @@ def upload_directory_contents(local_path, bucket):
 
     full_file_paths = [os.path.join(local_path, file) for file in os.listdir(local_path)]
 
-    threads = []
-
     for file in full_file_paths:
-        thread = threading.Thread(target=single_uploader, args=(file, bucket,))
-        threads.append(thread)
+        single_uploader(file, conf['visitdata_bucket'])
+    # threads = []
 
-        thread.start()
+    # for file in full_file_paths:
+    #     thread = threading.Thread(target=single_uploader, args=(file, bucket,))
+    #     threads.append(thread)
 
-    for _, thread in enumerate(threads):
-        thread.join()
+    #     thread.start()
+
+    # for _, thread in enumerate(threads):
+    #     thread.join()

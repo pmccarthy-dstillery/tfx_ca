@@ -78,12 +78,13 @@ def copy_visitdata_to_hdfs():
 
     qry = pkg_resources.read_text(sql_dir,'hive_visitdata_to_ext.sql')
 
-    print(qry)
+    logging.debug(qry)
 
+    # Produce ~5gb files
     with HiveWrapper(conf={
                             'hive.execution.engine':'tez',
                             'hive.merge.tezfiles':'true',
-                            'hive.merge.size.per.task':'1073741824',                            
+                            'hive.merge.size.per.task':'3221225472',                            
                             'mapred.output.compress':'true',
                             'hive.exec.compress.output':'true',
                             'mapred.output.compression.codec':'org.apache.hadoop.io.compress.GzipCodec',
@@ -118,7 +119,7 @@ def list_hdfs_files(dir):
     return files
 
 
-def clear_working_dir(dir):
+def clear_local_dir(dir):
     """
     Delete and recreate the place where the files
     from hdfs will go before loading to google cloud. 
@@ -140,7 +141,7 @@ def copy_hdfs_to_local(local_dir, hadoop_dir):
     start_time = datetime.datetime.now()
     logging.info(f"Downloading files from {hadoop_dir} to {local_dir}...")
 
-    clear_working_dir(local_dir)
+    clear_local_dir(local_dir)
 
     hadoop_files = list_hdfs_files(hadoop_dir)
 
@@ -159,5 +160,4 @@ def copy_hdfs_to_local(local_dir, hadoop_dir):
     fs.close()
 
     logging.info("Done coping files to local, time elapsed: %s", (datetime.datetime.now() - start_time))
-    logging.info("Files transferred: %s", len(hadoop_files))
         
