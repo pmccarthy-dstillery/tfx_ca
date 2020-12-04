@@ -45,10 +45,13 @@ if __name__ == "__main__":
             'region': conf['kfp']['region']
         }
 
+        ai_platform_training_args = None # <--- this makes the difference between running on k8s hardware and ml api
+
         # This pipeline automatically injects the Kubeflow TFX image if the
         # environment variable 'KUBEFLOW_TFX_IMAGE' is defined. The tfx
         # cli tool exports the environment variable to pass to the pipelines.
-        tfx_image = os.environ.get('KUBEFLOW_TFX_IMAGE', None)
+        # tfx_image = os.environ.get('KUBEFLOW_TFX_IMAGE', None)
+        tfx_image = conf['tfx_image']
         runner_config = kubeflow_dag_runner.KubeflowDagRunnerConfig(
             kubeflow_metadata_config=metadata_config,
             # Specify custom docker image to use.

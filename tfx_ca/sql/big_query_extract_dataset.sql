@@ -1,7 +1,7 @@
 with labeled as (
     select deviceid, 
     devicetype, 
-    case when content like '%meni%' or content like '%avw3%' then 1 else 0 end as label,
+    case when regexp_contains(content,"{{inputs.parameters.seed_pattern}}") then 1 else 0 end as label,
     content
   from tfx_ca.visitdata
 ), 
