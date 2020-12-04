@@ -1,0 +1,51 @@
+name: tfxca
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=1_gnu
+  - ca-certificates=2020.11.8=ha878542_0
+  - certifi=2020.11.8=py37h89c1867_0
+  - ld_impl_linux-64=2.35.1=hed1e6ac_0
+  - libffi=3.2.1=he1b5a44_1007
+  - libgcc-ng=9.3.0=h5dbcf3e_17
+  - libgomp=9.3.0=h5dbcf3e_17
+  - libstdcxx-ng=9.3.0=h2ae2ef3_17
+  - ncurses=6.2=h58526e2_4
+  - openssl=1.1.1h=h516909a_0
+  - pip=20.2.4=py_0
+  - python=3.7.8=h6f2ec95_1_cpython
+  - python_abi=3.7=1_cp37m
+  - readline=8.0=he28a2e2_2
+  - setuptools=49.6.0=py37he5f6b98_2
+  - sqlite=3.33.0=h4cf870e_1
+  - tk=8.6.10=hed695b0_1
+  - wheel=0.35.1=pyh9f0ad1d_0
+  - xz=5.2.5=h516909a_1
+  - zlib=1.2.11=h516909a_1010
+  - pip:
+    - cachetools==4.1.1
+    - cffi==1.14.3
+    - chardet==3.0.4
+    - google-api-core==1.23.0
+    - google-auth==1.23.0
+    - google-cloud-bigquery==2.3.1
+    - google-cloud-core==1.4.3
+    - google-crc32c==1.0.0
+    - google-resumable-media==1.1.0
+    - googleapis-common-protos==1.52.0
+    - grpcio==1.33.2
+    - idna==2.10
+    - proto-plus==1.11.0
+    - protobuf==3.14.0
+    - pyasn1==0.4.8
+    - pyasn1-modules==0.2.8
+    - pycparser==2.20
+    - pytz==2020.4
+    - pyyaml==5.3.1
+    - requests==2.25.0
+    - rsa==4.6
+    - six==1.15.0
+    - urllib3==1.26.2
+prefix: /opt/conda/envs/tfxca
