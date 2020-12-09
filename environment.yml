@@ -1,8 +1,6 @@
 name: tfxca
 channels:
   - conda-forge
-  - http://build03.sd.pipelane.net:8000/
-  - http://build03.sd.pipelane.net:8000
   - defaults
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
