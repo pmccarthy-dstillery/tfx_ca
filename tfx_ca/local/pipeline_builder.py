@@ -10,21 +10,51 @@ from tfx.components import (
 )
 from tfx.components.base import executor_spec
 from tfx.components.trainer.executor import GenericExecutor
-from tfx.extensions.google_cloud_big_query.example_gen.component import BigQueryExampleGen
+# from tfx.extensions.google_cloud_big_query.example_gen.component import BigQueryExampleGen
 from tfx.orchestration import (
     metadata,
     pipeline
 )
 from tfx.proto import (pusher_pb2,trainer_pb2)
+from tfx.proto import example_gen_pb2
 
 from tfx_ca import config
 from tfx_ca import sql as sql_dir
+from tfx_ca.bigquery_example_gen.component import BigQueryExampleGen
 
+# these imports support the runtime_parameter
+from google.protobuf import any_pb2
+from tfx.orchestration import data_types
+from tfx.utils import json_utils
+from tfx_ca.bigquery_example_gen.proto import bigquery_example_gen_pb2
 
 conf = config.load()
-src_qry = pkg_resources.read_text(sql_dir,'big_query_extract_dataset.sql')
+src_qry = pkg_resources.read_text(sql_dir,'big_query_extract_dataset_local.sql')
 
 beam_pipeline_args = conf['beam']['args']
+
+def build_query_seed():
+    """
+    Do the elaborate proto packing necessary to feed
+    a QueryExampleGen custom_config.
+    """
+
+    seed_runtime = data_types.RuntimeParameter(
+        name='seed_pattern',
+        default="'%meni%','%avw3%'",
+        ptype=str
+    )
+
+    bigquery_seed_proto = bigquery_example_gen_pb2.BigQuerySeed()
+    bigquery_seed_proto.seed = json_utils.dumps(seed_runtime)
+
+    any_proto = any_pb2.Any()
+    any_proto.Pack(bigquery_seed_proto, 'bigqueryseed.dstillery.com')
+
+    return example_gen_pb2.CustomConfig(custom_config=any_proto)
+
+
+
 
 def build_pipeline(timestamp: str) -> pipeline.Pipeline:
     """
@@ -40,7 +70,8 @@ def build_pipeline(timestamp: str) -> pipeline.Pipeline:
 
     logging.info("Serving model dir is now %s",conf['serving_model_dir'])
 
-    example_gen = BigQueryExampleGen(query=qry)
+    example_gen = BigQueryExampleGen(query=qry, custom_config=build_query_seed())
+    # example_gen = BigQueryExampleGen(query=qry)
 
     statistics_gen = StatisticsGen(examples=example_gen.outputs['examples'])
 
