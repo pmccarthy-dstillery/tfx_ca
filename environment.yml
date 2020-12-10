@@ -5,9 +5,18 @@ channels:
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=1_gnu
+  - brotlipy=0.7.0=py37h27cfd23_1003
   - ca-certificates=2020.11.8=ha878542_0
-  - certifi=2020.11.8=py37h89c1867_0
+  - certifi=2020.12.5=py37h06a4308_0
+  - chardet=3.0.4=py37h06a4308_1003
+  - cryptography=3.2.1=py37h3c74f83_1
+  - cyrus-sasl=2.1.27=hf484d3e_7
+  - future=0.18.2=py37_1
+  - idna=2.10=py_0
+  - krb5=1.18.2=h173b8e3_0
   - ld_impl_linux-64=2.35.1=hed1e6ac_0
+  - libdb=6.1.26=he6710b0_0
+  - libedit=3.1.20191231=h14c3975_1
   - libffi=3.2.1=he1b5a44_1007
   - libgcc-ng=9.3.0=h5dbcf3e_17
   - libgomp=9.3.0=h5dbcf3e_17
@@ -15,37 +24,182 @@ dependencies:
   - ncurses=6.2=h58526e2_4
   - openssl=1.1.1h=h516909a_0
   - pip=20.2.4=py_0
+  - pycparser=2.20=py_2
+  - pyhive=0.6.1=py37_0
+  - pyopenssl=20.0.0=pyhd3eb1b0_1
+  - pysocks=1.7.1=py37_1
   - python=3.7.8=h6f2ec95_1_cpython
   - python_abi=3.7=1_cp37m
   - readline=8.0=he28a2e2_2
+  - requests=2.25.0=pyhd3eb1b0_0
+  - sasl=0.2.1=py37h779454e_1
   - setuptools=49.6.0=py37he5f6b98_2
+  - six=1.15.0=py37h06a4308_0
+  - sqlalchemy=1.3.20=py37h27cfd23_0
   - sqlite=3.33.0=h4cf870e_1
+  - thrift=0.13.0=py37he6710b0_0
+  - thrift_sasl=0.4.2=py37_1
   - tk=8.6.10=hed695b0_1
   - wheel=0.35.1=pyh9f0ad1d_0
   - xz=5.2.5=h516909a_1
   - zlib=1.2.11=h516909a_1010
   - pip:
+    - absl-py==0.10.0
+    - apache-beam==2.25.0
+    - argon2-cffi==20.1.0
+    - astunparse==1.6.3
+    - async-generator==1.10
+    - attrs==19.3.0
+    - avro-python3==1.9.2.1
+    - backcall==0.2.0
+    - bleach==3.2.1
     - cachetools==4.1.1
     - cffi==1.14.3
-    - chardet==3.0.4
+    - click==7.1.2
+    - cloudpickle==1.6.0
+    - colorama==0.4.4
+    - crcmod==1.7
+    - decorator==4.4.2
+    - defusedxml==0.6.0
+    - deprecated==1.2.10
+    - dill==0.3.1.1
+    - docker==4.3.1
+    - docopt==0.6.2
+    - docstring-parser==0.7.3
+    - entrypoints==0.3
+    - fastavro==1.2.0
+    - fasteners==0.15
+    - gast==0.3.3
     - google-api-core==1.23.0
+    - google-api-python-client==1.12.8
+    - google-apitools==0.5.31
     - google-auth==1.23.0
-    - google-cloud-bigquery==2.3.1
+    - google-auth-httplib2==0.0.4
+    - google-auth-oauthlib==0.4.2
+    - google-cloud-bigquery==1.28.0
+    - google-cloud-bigtable==1.6.0
+    - google-cloud-build==2.0.0
     - google-cloud-core==1.4.3
+    - google-cloud-datastore==1.15.3
+    - google-cloud-dlp==1.0.0
+    - google-cloud-language==1.3.0
+    - google-cloud-pubsub==1.7.0
+    - google-cloud-spanner==1.19.1
+    - google-cloud-storage==1.33.0
+    - google-cloud-videointelligence==1.16.1
+    - google-cloud-vision==1.0.0
     - google-crc32c==1.0.0
+    - google-pasta==0.2.0
     - google-resumable-media==1.1.0
     - googleapis-common-protos==1.52.0
+    - grpc-google-iam-v1==0.12.3
     - grpcio==1.33.2
-    - idna==2.10
+    - grpcio-gcp==0.2.2
+    - h5py==2.10.0
+    - hdfs==2.5.8
+    - httplib2==0.17.4
+    - importlib-metadata==2.0.0
+    - ipykernel==5.3.4
+    - ipython==7.19.0
+    - ipython-genutils==0.2.0
+    - ipywidgets==7.5.1
+    - jedi==0.17.2
+    - jinja2==2.11.2
+    - joblib==0.14.1
+    - jsonschema==3.2.0
+    - jupyter==1.0.0
+    - jupyter-client==6.1.7
+    - jupyter-console==6.2.0
+    - jupyter-core==4.7.0
+    - jupyterlab-pygments==0.1.2
+    - keras-preprocessing==1.1.2
+    - keras-tuner==1.0.1
+    - kfp==1.0.4
+    - kfp-pipeline-spec==0.1.2
+    - kfp-server-api==1.0.4
+    - kubernetes==11.0.0
+    - libcst==0.3.14
+    - markdown==3.3.3
+    - markupsafe==1.1.1
+    - mistune==0.8.4
+    - ml-metadata==0.25.0
+    - mock==2.0.0
+    - monotonic==1.5
+    - mypy-extensions==0.4.3
+    - nbclient==0.5.1
+    - nbconvert==6.0.7
+    - nbformat==5.0.8
+    - nest-asyncio==1.4.3
+    - notebook==6.1.5
+    - numpy==1.18.5
+    - oauth2client==4.1.3
+    - oauthlib==3.1.0
+    - opt-einsum==3.3.0
+    - packaging==20.4
+    - pandas==1.1.4
+    - pandocfilters==1.4.3
+    - parso==0.7.1
+    - pbr==5.5.1
+    - pexpect==4.8.0
+    - pickleshare==0.7.5
+    - prometheus-client==0.9.0
+    - promise==2.3
+    - prompt-toolkit==3.0.8
     - proto-plus==1.11.0
     - protobuf==3.14.0
+    - ptyprocess==0.6.0
+    - pyarrow==0.17.1
     - pyasn1==0.4.8
     - pyasn1-modules==0.2.8
-    - pycparser==2.20
+    - pydot==1.4.1
+    - pygments==2.7.2
+    - pymongo==3.11.1
+    - pyparsing==2.4.7
+    - pyrsistent==0.17.3
+    - python-dateutil==2.8.1
     - pytz==2020.4
     - pyyaml==5.3.1
-    - requests==2.25.0
+    - pyzmq==20.0.0
+    - qtconsole==4.7.7
+    - qtpy==1.9.0
+    - requests-oauthlib==1.3.0
+    - requests-toolbelt==0.9.1
     - rsa==4.6
-    - six==1.15.0
+    - scikit-learn==0.23.2
+    - scipy==1.5.4
+    - send2trash==1.5.0
+    - strip-hints==0.1.9
+    - tabulate==0.8.7
+    - tensorboard==2.4.0
+    - tensorboard-plugin-wit==1.7.0
+    - tensorflow==2.3.1
+    - tensorflow-cloud==0.1.9
+    - tensorflow-data-validation==0.25.0
+    - tensorflow-datasets==3.0.0
+    - tensorflow-estimator==2.3.0
+    - tensorflow-hub==0.9.0
+    - tensorflow-metadata==0.25.0
+    - tensorflow-model-analysis==0.25.0
+    - tensorflow-transform==0.25.0
+    - termcolor==1.1.0
+    - terminado==0.9.1
+    - terminaltables==3.1.0
+    - testpath==0.4.4
+    - tfx==0.25.0
+    - tfx-bsl==0.25.0
+    - threadpoolctl==2.1.0
+    - tornado==6.1
+    - tqdm==4.52.0
+    - traitlets==5.0.5
+    - typing-extensions==3.7.4.3
+    - typing-inspect==0.6.0
+    - uritemplate==3.0.1
     - urllib3==1.26.2
-prefix: /opt/conda/envs/tfxca
+    - wcwidth==0.2.5
+    - webencodings==0.5.1
+    - websocket-client==0.57.0
+    - werkzeug==1.0.1
+    - widgetsnbextension==3.5.1
+    - wrapt==1.12.1
+    - zipp==3.4.0
+prefix: /home/pmccarthy/.pyenv/versions/miniconda3-latest/envs/tfxca

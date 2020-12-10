@@ -10,7 +10,7 @@ from tfx.proto import trainer_pb2
 from google.cloud import bigquery
 
 from tfx_ca import config
-# from tfx_ca import bigquery_actions, gcs_actions, hive_actions, pipeline_builder
+from tfx_ca import bigquery_actions, gcs_actions, hive_actions
 from tfx_ca.local import pipeline_builder as local_pipeline_builder
 from tfx_ca.kfp import pipeline_builder as kfp_pipeline_builder
 
@@ -25,11 +25,25 @@ timestamp = datetime.datetime.strftime(datetime.datetime.now(),'%Y%m%d%H%m')
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-p","--platform",choices=['local','kfp'])
+parser.add_argument("-p","--platform", choices=['local','kfp'], required=False)
+parser.add_argument("-q","--query", action="store_true", required=False)
 
 args = parser.parse_args()
 
 if __name__ == "__main__":
+
+
+    if args.query:
+        bigquery_actions.create_or_stat_project_dataset(project=conf['project'], dataset_id=conf['dataset_id'])
+
+        bigquery_actions.create_or_stat_visitdata_table()
+
+        hive_actions.copy_visitdata_to_hdfs()
+        hive_actions.copy_hdfs_to_local(conf['local_staging_dir'], conf['hdfs_staging_dir'])
+
+        gcs_actions.delete_bucket_contents(conf['visitdata_bucket'])
+        gcs_actions.upload_directory_contents('/tmp/tfxca_data','tfxca_visitdata')
+        bigquery_actions.populate_visitdata()
 
     if args.platform == 'local':
         
@@ -45,10 +59,13 @@ if __name__ == "__main__":
             'region': conf['kfp']['region']
         }
 
+        ai_platform_training_args = None # <--- this makes the difference between running on k8s hardware and ml api
+
         # This pipeline automatically injects the Kubeflow TFX image if the
         # environment variable 'KUBEFLOW_TFX_IMAGE' is defined. The tfx
         # cli tool exports the environment variable to pass to the pipelines.
-        tfx_image = os.environ.get('KUBEFLOW_TFX_IMAGE', None)
+        # tfx_image = os.environ.get('KUBEFLOW_TFX_IMAGE', None)
+        tfx_image = conf['tfx_image']
         runner_config = kubeflow_dag_runner.KubeflowDagRunnerConfig(
             kubeflow_metadata_config=metadata_config,
             # Specify custom docker image to use.
@@ -71,16 +88,5 @@ if __name__ == "__main__":
 
         print("KFP has been run")
 
-    # print(create_project_dataset(project=conf['project'], dataset_id=conf['dataset_id']))
 
-    # bigquery_actions.create_or_stat_visitdata_table()
 
-    # hive_actions.copy_visitdata_to_hdfs()
-
-    # hive_actions.copy_hdfs_to_local(conf['local_staging_dir'], conf['hdfs_staging_dir'])
-
-    # gcs_actions.delete_bucket_contents(conf['visitdata_bucket'])
-    # gcs_actions.upload_directory_contents('/tmp/tfxca_data','tfxca_visitdata')
-    # bigquery_actions.populate_visitdata()
-
-    # tfx_pipeline = builder.build_pipeline(timestamp)

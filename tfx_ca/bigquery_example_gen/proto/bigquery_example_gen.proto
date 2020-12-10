@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package tfx_ca.bigquery_example_gen;
+
+message BigQuerySeed {
+  // Based off official prestodb-python-client library
+  // https://github.com/prestodb/presto-python-client
+  string seed = 1;  // require
+}

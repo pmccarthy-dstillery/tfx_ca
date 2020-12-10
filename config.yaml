@@ -4,6 +4,7 @@ bigquery_table: visitdata
 visitdata_bucket: tfxca_visitdata
 local_staging_dir: /tmp/tfxca_data
 hdfs_staging_dir: /user/pmccarthy/tickets/mle4351/tfxca_visitdata
+tfx_image: gcr.io/dst-mlpipes/tfx_ca:latest
 
 pipeline_root_dir: 'gs://tfxca-pipeline-artifacts'
 serving_model_dir: 'gs://tfxca-model-serving'

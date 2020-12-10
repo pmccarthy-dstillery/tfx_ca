@@ -2,6 +2,7 @@ import importlib.resources as pkg_resources
 import logging
 from typing import Any, Dict, List, Optional, Text
 
+import absl
 from ml_metadata.proto import metadata_store_pb2
 from tfx.components import (
     ExampleValidator,    
@@ -14,16 +15,46 @@ from tfx.components import (
 from tfx.dsl.components.base import executor_spec
 # from tfx.components.base import executor_spec
 from tfx.components.trainer.executor import GenericExecutor
-from tfx.extensions.google_cloud_big_query.example_gen.component import BigQueryExampleGen
+# from tfx.extensions.google_cloud_big_query.example_gen.component import BigQueryExampleGen
 from tfx.extensions.google_cloud_ai_platform.pusher import executor as ai_platform_pusher_executor
 from tfx.extensions.google_cloud_ai_platform.trainer import executor as ai_platform_trainer_executor
-from tfx.orchestration import pipeline
-from tfx.proto import (pusher_pb2,trainer_pb2)
+from tfx.orchestration import data_types, pipeline
+from tfx.proto import (example_gen_pb2, pusher_pb2,trainer_pb2)
 
 from tfx_ca import config
 from tfx_ca import sql as sql_dir
+# from tfx_ca.components import RuntimeBigQueryExampleGen
+
+# these imports support the runtime_parameter
+from tfx_ca.bigquery_example_gen.component import BigQueryExampleGen
+from google.protobuf import any_pb2
+from tfx.orchestration import data_types
+from tfx.utils import json_utils
+from tfx_ca.bigquery_example_gen.proto import bigquery_example_gen_pb2
+
 
 conf = config.load()
+
+def build_query_seed() -> example_gen_pb2.CustomConfig:
+    """
+    Do the elaborate proto packing necessary to feed
+    a QueryExampleGen custom_config.
+    """
+
+    seed_runtime = data_types.RuntimeParameter(
+        name='seed_pattern',
+        default="meni|avw2",
+        ptype=str
+    )
+
+    bigquery_seed_proto = bigquery_example_gen_pb2.BigQuerySeed()
+    bigquery_seed_proto.seed = json_utils.dumps(seed_runtime)
+
+    any_proto = any_pb2.Any()
+    any_proto.Pack(bigquery_seed_proto, 'bigqueryseed.dstillery.com')
+
+    return example_gen_pb2.CustomConfig(custom_config=any_proto)
+
 
 def create_pipeline(
     pipeline_name: Text,
@@ -41,7 +72,7 @@ def create_pipeline(
 
     qry = pkg_resources.read_text(sql_dir,'big_query_extract_dataset.sql')
 
-    example_gen = BigQueryExampleGen(query=qry)
+    example_gen = BigQueryExampleGen(query=qry, custom_config=build_query_seed())
 
     statistics_gen = StatisticsGen(examples=example_gen.outputs['examples'])
 
@@ -55,7 +86,6 @@ def create_pipeline(
         schema=schema_gen.outputs['schema']
     )
 
-
     trainer_args = {
        'module_file': module_file,
        'custom_executor_spec':
@@ -63,7 +93,7 @@ def create_pipeline(
        'examples': example_gen.outputs['examples'],
        'schema': schema_gen.outputs['schema'],
        'train_args': train_args,
-       'eval_args': eval_args,
+       'eval_args': eval_args
     }
 
     if ai_platform_training_args is not None:
